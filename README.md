@@ -1,3 +1,4 @@
+# Please  note: This is a work in progress!
 # Free Website Template with Google Sheets CMS
 
 Create and host your own website for **100% FREE** using GitHub Pages and Google Sheets - no coding knowledge required!
