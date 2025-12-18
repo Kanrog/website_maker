@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +46,7 @@
             display: block;
         }
 
-        /* Site Header (Row 1) */
+        /* Site Header (Row 2) */
         .site-header {
             text-align: center;
             padding: 60px 20px;
@@ -82,7 +83,7 @@
             line-height: 1.8;
         }
 
-        /* Content Sections (Row 2+) */
+        /* Content Sections (Row 5+) */
         .content-section {
             padding: 60px 20px;
             border-bottom: 1px solid #eee;
@@ -175,7 +176,6 @@
             margin-top: 10px;
         }
     </style>
-<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
 <body>
     <div id="loading">Loading your website...</div>
@@ -191,7 +191,7 @@
         
         // Replace with your Google Sheet ID
         // Find it in your sheet URL: https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit
-        const SHEET_ID = '1xanlmg5nOmLs5rTFBV3P9bCVNVabNFIdF9x_ilDIx0Q';
+        const SHEET_ID = 'YOUR_SHEET_ID_HERE';
         
         // Sheet names (you can change these if you rename your tabs)
         const CONTENT_SHEET_NAME = 'Sheet1';
@@ -207,7 +207,8 @@
 
         // Parse CSV data
         function parseCSV(csv) {
-            const lines = csv.split('\n');
+            const lines = csv.split('\
+');
             const result = [];
             
             for (let line of lines) {
@@ -271,17 +272,26 @@
                 textSize: '16px'
             };
 
-            // Extract styling values (Column B = colors, Column C = sizes)
-            // Row 1 is labels, so we start from Row 2 (index 1)
-            const mainHeaderColor = stylingData[1]?.[1] || defaults.mainHeaderColor;
-            const sectionHeaderColor = stylingData[2]?.[1] || defaults.sectionHeaderColor;
-            const textColor = stylingData[3]?.[1] || defaults.textColor;
-            const backgroundColor = stylingData[4]?.[1] || defaults.backgroundColor;
-            const linkColor = stylingData[5]?.[1] || defaults.linkColor;
+            // Extract styling values - Find by label in Column A, then get values from Column B (colors) and Column C (sizes)
+            const getColorByLabel = (label) => {
+                const row = stylingData.find(row => row[0] === label);
+                return row ? row[1] : defaults[label.replace(/\s+/g, '').replace('Color', 'Color')];
+            };
+
+            const getSizeByLabel = (label) => {
+                const row = stylingData.find(row => row[0] === label);
+                return row ? row[2] : defaults[label.replace(/\s+/g, '').replace('Size', 'Size')];
+            };
+
+            const mainHeaderColor = getColorByLabel('Main Header Color');
+            const sectionHeaderColor = getColorByLabel('Section Header Color');
+            const textColor = getColorByLabel('Body Text Color');
+            const backgroundColor = getColorByLabel('Background Color');
+            const linkColor = getColorByLabel('Link Hover Color');
             
-            const mainHeaderSize = stylingData[1]?.[2] || defaults.mainHeaderSize;
-            const sectionHeaderSize = stylingData[2]?.[2] || defaults.sectionHeaderSize;
-            const textSize = stylingData[3]?.[2] || defaults.textSize;
+            const mainHeaderSize = getSizeByLabel('Main Header Color');
+            const sectionHeaderSize = getSizeByLabel('Section Header Color');
+            const textSize = getSizeByLabel('Body Text Color');
 
             // Apply styles dynamically
             const style = document.createElement('style');
@@ -312,13 +322,13 @@
             document.head.appendChild(style);
         }
 
-        // Generate site header (Row 2 - Row 1 is labels)
+        // Generate site header (Row 2)
         function generateSiteHeader(row) {
-            const mainHeader = row[0] || 'Welcome to My Website';
-            const heroImage = row[1] || '';
-            const slogan = row[2] || '';
-            const introText = row[3] || '';
-            const footerText = row[4] || '';
+            const mainHeader = row[1] || 'Welcome to My Website'; // Column B
+            const heroImage = row[2] || ''; // Column C
+            const slogan = row[3] || ''; // Column D
+            const introText = row[4] || ''; // Column E
+            const footerText = row[5] || ''; // Column F
 
             let headerHTML = `
                 <div class="site-header">
@@ -346,18 +356,18 @@
             return { headerHTML, footerText };
         }
 
-        // Generate content section (Row 4+ - Row 4 is labels)
+        // Generate content section (Row 5+)
         function generateContentSection(row) {
-            const header = row[0] || '';
-            const link = row[1] || '';
-            const image = row[2] || '';
-            const text = row[3] || '';
+            const header = row[0] || ''; // Column A
+            const link = row[1] || ''; // Column B
+            const image = row[2] || ''; // Column C
+            const text = row[3] || ''; // Column D
 
             // Skip empty rows and label rows
             if (!header && !text && !image) return '';
             
-            // Skip if this looks like a label row (contains "Field Name" or similar)
-            if (header.toLowerCase().includes('field') || header.toLowerCase().includes('section header')) return '';
+            // Skip if this looks like a label row
+            if (header.toLowerCase().includes('section header') || header.toLowerCase().includes('field name')) return '';
 
             let sectionHTML = `
                 <div class="content-section">
@@ -393,12 +403,13 @@
             const content = document.getElementById('content');
             content.innerHTML = `
                 <div class="error-message">
-                    <h2>⚠️ Configuration Error</h2>
+                    <h2>\u26a0\ufe0f Configuration Error</h2>
                     <p>${message}</p>
                     <ul>
                         <li>Make sure you've replaced 'YOUR_SHEET_ID_HERE' with your actual Google Sheet ID</li>
                         <li>Verify your Google Sheet is set to "Anyone with the link can view"</li>
                         <li>Check that your sheet has tabs named "Sheet1" and "Styling"</li>
+                        <li>Ensure your sheet has the proper label rows (Row 1 and Row 4 in Content sheet)</li>
                     </ul>
                 </div>
             `;
@@ -421,9 +432,14 @@
                 return;
             }
 
+            // Debug: Log the first few rows
+            console.log('Content data:', contentData.slice(0, 6));
+
             // Fetch styling data (optional)
             const stylingData = await fetchSheetData(STYLING_URL);
             if (stylingData) {
+                // Debug: Log styling data
+                console.log('Styling data:', stylingData.slice(0, 6));
                 applyCustomStyling(stylingData);
             }
 
@@ -438,7 +454,7 @@
                 footerText = footer;
             }
 
-            // Process Row 4+ (Content Sections - Row 3 is empty, Row 4 is labels)
+            // Process Row 5+ (Content Sections - Row 2 is header, Row 3 empty, Row 4 labels)
             for (let i = 4; i < contentData.length; i++) {
                 websiteHTML += generateContentSection(contentData[i]);
             }
@@ -458,9 +474,9 @@
             const content = document.getElementById('content');
             content.innerHTML = websiteHTML;
             
-            // Update page title if main header exists (Row 2, Column A)
-            if (contentData.length > 1 && contentData[1][0]) {
-                document.title = contentData[1][0];
+            // Update page title if main header exists (Row 2, Column B)
+            if (contentData.length > 1 && contentData[1][1]) {
+                document.title = contentData[1][1];
             }
 
             // Hide loading, show content
