@@ -260,6 +260,7 @@
             const textColor = stylingData[3]?.[1] || '#555555';
             const backgroundColor = stylingData[4]?.[1] || '#ffffff';
             const linkColor = stylingData[5]?.[1] || '#667eea';
+            const headerBackgroundColor = stylingData[6]?.[1] || '#667eea';
             
             const mainHeaderSize = stylingData[1]?.[2] || '48px';
             const sectionHeaderSize = stylingData[2]?.[2] || '32px';
@@ -272,7 +273,7 @@
                     background-color: ${backgroundColor};
                 }
                 .site-header {
-                    background-color: ${linkColor};
+                    background-color: ${headerBackgroundColor};
                 }
                 .site-footer {
                     background-color: ${sectionHeaderColor};
