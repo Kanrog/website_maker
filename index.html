@@ -271,6 +271,15 @@
                 body {
                     background-color: ${backgroundColor};
                 }
+                .site-header {
+                    background: linear-gradient(135deg, ${linkColor} 0%, ${sectionHeaderColor} 100%);
+                }
+                .site-footer {
+                    background-color: ${sectionHeaderColor};
+                }
+                .content-section:nth-child(even) {
+                    background-color: ${backgroundColor}ee;
+                }
                 .site-header h1 {
                     color: ${mainHeaderColor};
                     font-size: ${mainHeaderSize};
@@ -291,6 +300,7 @@
                     color: ${mainHeaderColor};
                 }
             `;
+
             document.head.appendChild(style);
         }
 
