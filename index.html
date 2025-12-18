@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +45,7 @@
             display: block;
         }
 
-        /* Site Header (Row 2) */
+        /* Site Header */
         .site-header {
             text-align: center;
             padding: 60px 20px;
@@ -83,7 +82,7 @@
             line-height: 1.8;
         }
 
-        /* Content Sections (Row 5+) */
+        /* Content Sections */
         .content-section {
             padding: 60px 20px;
             border-bottom: 1px solid #eee;
@@ -176,6 +175,7 @@
             margin-top: 10px;
         }
     </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
 <body>
     <div id="loading">Loading your website...</div>
@@ -185,34 +185,21 @@
     </div>
 
     <script>
-        // ============================================
-        // CONFIGURATION - EDIT THIS SECTION
-        // ============================================
-        
-        // Replace with your Google Sheet ID
-        // Find it in your sheet URL: https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit
+        // CONFIGURATION
         const SHEET_ID = '1xanlmg5nOmLs5rTFBV3P9bCVNVabNFIdF9x_ilDIx0Q';
-        
-        // Sheet names (you can change these if you rename your tabs)
         const CONTENT_SHEET_NAME = 'Sheet1';
         const STYLING_SHEET_NAME = 'Styling';
         
-        // ============================================
-        // DO NOT EDIT BELOW THIS LINE
-        // ============================================
-
-        // Google Sheets CSV export URLs
+        // URLs
         const CONTENT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${CONTENT_SHEET_NAME}`;
         const STYLING_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${STYLING_SHEET_NAME}`;
 
-        // Parse CSV data
+        // Parse CSV
         function parseCSV(csv) {
-            const lines = csv.split('\
-');
+            const lines = csv.split('\n');
             const result = [];
             
             for (let line of lines) {
-                // Handle quoted fields that may contain commas
                 const row = [];
                 let currentField = '';
                 let inQuotes = false;
@@ -241,7 +228,7 @@
             return result;
         }
 
-        // Fetch and parse Google Sheet data
+        // Fetch data
         async function fetchSheetData(url) {
             try {
                 const response = await fetch(url);
@@ -256,44 +243,29 @@
             }
         }
 
-        // Apply styling from the Styling sheet
+        // Apply styling
         function applyCustomStyling(stylingData) {
             if (!stylingData || stylingData.length < 2) return;
 
-            // Default styling values
-            const defaults = {
-                mainHeaderColor: '#ffffff',
-                sectionHeaderColor: '#333333',
-                textColor: '#555555',
-                backgroundColor: '#ffffff',
-                linkColor: '#667eea',
-                mainHeaderSize: '48px',
-                sectionHeaderSize: '32px',
-                textSize: '16px'
-            };
-
-            // Extract styling values - Find by label in Column A, then get values from Column B (colors) and Column C (sizes)
-            const getColorByLabel = (label) => {
-                const row = stylingData.find(row => row[0] === label);
-                return row ? row[1] : defaults[label.replace(/\s+/g, '').replace('Color', 'Color')];
-            };
-
-            const getSizeByLabel = (label) => {
-                const row = stylingData.find(row => row[0] === label);
-                return row ? row[2] : defaults[label.replace(/\s+/g, '').replace('Size', 'Size')];
-            };
-
-            const mainHeaderColor = getColorByLabel('Main Header Color');
-            const sectionHeaderColor = getColorByLabel('Section Header Color');
-            const textColor = getColorByLabel('Body Text Color');
-            const backgroundColor = getColorByLabel('Background Color');
-            const linkColor = getColorByLabel('Link Hover Color');
+            // Get colors and sizes by row position
+            // Row 0: labels
+            // Row 1: Main Header
+            // Row 2: Section Header  
+            // Row 3: Body Text
+            // Row 4: Background
+            // Row 5: Link Hover
             
-            const mainHeaderSize = getSizeByLabel('Main Header Color');
-            const sectionHeaderSize = getSizeByLabel('Section Header Color');
-            const textSize = getSizeByLabel('Body Text Color');
+            const mainHeaderColor = stylingData[1]?.[1] || '#ffffff';
+            const sectionHeaderColor = stylingData[2]?.[1] || '#333333';
+            const textColor = stylingData[3]?.[1] || '#555555';
+            const backgroundColor = stylingData[4]?.[1] || '#ffffff';
+            const linkColor = stylingData[5]?.[1] || '#667eea';
+            
+            const mainHeaderSize = stylingData[1]?.[2] || '48px';
+            const sectionHeaderSize = stylingData[2]?.[2] || '32px';
+            const textSize = stylingData[3]?.[2] || '16px';
 
-            // Apply styles dynamically
+            // Apply styles
             const style = document.createElement('style');
             style.textContent = `
                 body {
@@ -322,8 +294,9 @@
             document.head.appendChild(style);
         }
 
-        // Generate site header (Row 2)
+        // Generate site header (Row 2 in sheet)
         function generateSiteHeader(row) {
+            // Row structure: | Field Name | Main Site Title | Hero Image URL | Site Slogan | Introduction Text | Footer Text |
             const mainHeader = row[1] || 'Welcome to My Website'; // Column B
             const heroImage = row[2] || ''; // Column C
             const slogan = row[3] || ''; // Column D
@@ -356,8 +329,9 @@
             return { headerHTML, footerText };
         }
 
-        // Generate content section (Row 5+)
+        // Generate content section (Row 5+ in sheet)
         function generateContentSection(row) {
+            // Row structure: | Section Header | Link URL (optional) | Image URL (optional) | Section Text Content |
             const header = row[0] || ''; // Column A
             const link = row[1] || ''; // Column B
             const image = row[2] || ''; // Column C
@@ -365,8 +339,6 @@
 
             // Skip empty rows and label rows
             if (!header && !text && !image) return '';
-            
-            // Skip if this looks like a label row
             if (header.toLowerCase().includes('section header') || header.toLowerCase().includes('field name')) return '';
 
             let sectionHTML = `
@@ -403,13 +375,12 @@
             const content = document.getElementById('content');
             content.innerHTML = `
                 <div class="error-message">
-                    <h2>\u26a0\ufe0f Configuration Error</h2>
+                    <h2>⚠️ Configuration Error</h2>
                     <p>${message}</p>
                     <ul>
                         <li>Make sure you've replaced 'YOUR_SHEET_ID_HERE' with your actual Google Sheet ID</li>
                         <li>Verify your Google Sheet is set to "Anyone with the link can view"</li>
                         <li>Check that your sheet has tabs named "Sheet1" and "Styling"</li>
-                        <li>Ensure your sheet has the proper label rows (Row 1 and Row 4 in Content sheet)</li>
                     </ul>
                 </div>
             `;
@@ -417,7 +388,7 @@
             content.classList.add('visible');
         }
 
-        // Main function to build the website
+        // Main function
         async function buildWebsite() {
             // Check if Sheet ID is configured
             if (SHEET_ID === 'YOUR_SHEET_ID_HERE') {
@@ -432,13 +403,12 @@
                 return;
             }
 
-            // Debug: Log the first few rows
+            // Debug: Show first few rows
             console.log('Content data:', contentData.slice(0, 6));
 
-            // Fetch styling data (optional)
+            // Fetch styling data
             const stylingData = await fetchSheetData(STYLING_URL);
             if (stylingData) {
-                // Debug: Log styling data
                 console.log('Styling data:', stylingData.slice(0, 6));
                 applyCustomStyling(stylingData);
             }
@@ -447,14 +417,14 @@
             let websiteHTML = '';
             let footerText = '';
 
-            // Process Row 2 (Site Header - Row 1 is labels)
+            // Process Row 2 (Site Header)
             if (contentData.length > 1) {
                 const { headerHTML, footerText: footer } = generateSiteHeader(contentData[1]);
                 websiteHTML += headerHTML;
                 footerText = footer;
             }
 
-            // Process Row 5+ (Content Sections - Row 2 is header, Row 3 empty, Row 4 labels)
+            // Process Row 5+ (Content Sections)
             for (let i = 4; i < contentData.length; i++) {
                 websiteHTML += generateContentSection(contentData[i]);
             }
@@ -474,7 +444,7 @@
             const content = document.getElementById('content');
             content.innerHTML = websiteHTML;
             
-            // Update page title if main header exists (Row 2, Column B)
+            // Update page title
             if (contentData.length > 1 && contentData[1][1]) {
                 document.title = contentData[1][1];
             }
