@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Loading State */
+        #loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-size: 24px;
+            color: #666;
+        }
+
+        #loading.hidden {
+            display: none;
+        }
+
+        #content {
+            display: none;
+        }
+
+        #content.visible {
+            display: block;
+        }
+
+        /* Site Header (Row 1) */
+        .site-header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .site-header h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .site-header .hero-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 400px;
+            margin: 30px auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .site-header .slogan {
+            font-size: 24px;
+            margin: 20px 0;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .site-header .intro-text {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 20px auto;
+            line-height: 1.8;
+        }
+
+        /* Content Sections (Row 2+) */
+        .content-section {
+            padding: 60px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-section:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .content-section h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .content-section h2 a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .content-section h2 a:hover {
+            color: #667eea;
+        }
+
+        .content-section img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            max-width: 800px;
+        }
+
+        /* Footer */
+        .site-footer {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .site-header h1 {
+                font-size: 32px;
+            }
+
+            .site-header .slogan {
+                font-size: 18px;
+            }
+
+            .site-header .intro-text {
+                font-size: 16px;
+            }
+
+            .content-section h2 {
+                font-size: 24px;
+            }
+
+            .content-section {
+                padding: 40px 20px;
+            }
+        }
+
+        /* Error Message */
+        .error-message {
+            background-color: #fee;
+            border: 2px solid #fcc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            color: #c33;
+        }
+
+        .error-message h2 {
+            margin-bottom: 10px;
+        }
+
+        .error-message ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div id="loading">Loading your website...</div>
+    
+    <div id="content">
+        <!-- Content will be dynamically generated here -->
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION - EDIT THIS SECTION
+        // ============================================
+        
+        // Replace with your Google Sheet ID
+        // Find it in your sheet URL: https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit
+        const SHEET_ID = 'YOUR_SHEET_ID_HERE';
+        
+        // Sheet names (you can change these if you rename your tabs)
+        const CONTENT_SHEET_NAME = 'Sheet1';
+        const STYLING_SHEET_NAME = 'Styling';
+        
+        // ============================================
+        // DO NOT EDIT BELOW THIS LINE
+        // ============================================
+
+        // Google Sheets CSV export URLs
+        const CONTENT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${CONTENT_SHEET_NAME}`;
+        const STYLING_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${STYLING_SHEET_NAME}`;
+
+        // Parse CSV data
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            const result = [];
+            
+            for (let line of lines) {
+                // Handle quoted fields that may contain commas
+                const row = [];
+                let currentField = '';
+                let inQuotes = false;
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    
+                    if (char === '"') {
+                        if (inQuotes && line[i + 1] === '"') {
+                            currentField += '"';
+                            i++;
+                        } else {
+                            inQuotes = !inQuotes;
+                        }
+                    } else if (char === ',' && !inQuotes) {
+                        row.push(currentField.trim());
+                        currentField = '';
+                    } else {
+                        currentField += char;
+                    }
+                }
+                row.push(currentField.trim());
+                result.push(row);
+            }
+            
+            return result;
+        }
+
+        // Fetch and parse Google Sheet data
+        async function fetchSheetData(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const csv = await response.text();
+                return parseCSV(csv);
+            } catch (error) {
+                console.error('Error fetching sheet data:', error);
+                return null;
+            }
+        }
+
+        // Apply styling from the Styling sheet
+        function applyCustomStyling(stylingData) {
+            if (!stylingData || stylingData.length < 2) return;
+
+            // Default styling values
+            const defaults = {
+                mainHeaderColor: '#ffffff',
+                sectionHeaderColor: '#333333',
+                textColor: '#555555',
+                backgroundColor: '#ffffff',
+                linkColor: '#667eea',
+                mainHeaderSize: '48px',
+                sectionHeaderSize: '32px',
+                textSize: '16px'
+            };
+
+            // Extract styling values (Column B = colors, Column C = sizes)
+            // Row 1 is labels, so we start from Row 2 (index 1)
+            const mainHeaderColor = stylingData[1]?.[1] || defaults.mainHeaderColor;
+            const sectionHeaderColor = stylingData[2]?.[1] || defaults.sectionHeaderColor;
+            const textColor = stylingData[3]?.[1] || defaults.textColor;
+            const backgroundColor = stylingData[4]?.[1] || defaults.backgroundColor;
+            const linkColor = stylingData[5]?.[1] || defaults.linkColor;
+            
+            const mainHeaderSize = stylingData[1]?.[2] || defaults.mainHeaderSize;
+            const sectionHeaderSize = stylingData[2]?.[2] || defaults.sectionHeaderSize;
+            const textSize = stylingData[3]?.[2] || defaults.textSize;
+
+            // Apply styles dynamically
+            const style = document.createElement('style');
+            style.textContent = `
+                body {
+                    background-color: ${backgroundColor};
+                }
+                .site-header h1 {
+                    color: ${mainHeaderColor};
+                    font-size: ${mainHeaderSize};
+                }
+                .content-section h2 {
+                    color: ${sectionHeaderColor};
+                    font-size: ${sectionHeaderSize};
+                }
+                .content-section p {
+                    color: ${textColor};
+                    font-size: ${textSize};
+                }
+                .content-section h2 a:hover {
+                    color: ${linkColor};
+                }
+                .site-header .slogan,
+                .site-header .intro-text {
+                    color: ${mainHeaderColor};
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Generate site header (Row 2 - Row 1 is labels)
+        function generateSiteHeader(row) {
+            const mainHeader = row[0] || 'Welcome to My Website';
+            const heroImage = row[1] || '';
+            const slogan = row[2] || '';
+            const introText = row[3] || '';
+            const footerText = row[4] || '';
+
+            let headerHTML = `
+                <div class="site-header">
+                    <div class="container">
+                        <h1>${mainHeader}</h1>
+            `;
+
+            if (heroImage) {
+                headerHTML += `<img src="${heroImage}" alt="Hero Image" class="hero-image">`;
+            }
+
+            if (slogan) {
+                headerHTML += `<p class="slogan">${slogan}</p>`;
+            }
+
+            if (introText) {
+                headerHTML += `<p class="intro-text">${introText}</p>`;
+            }
+
+            headerHTML += `
+                    </div>
+                </div>
+            `;
+
+            return { headerHTML, footerText };
+        }
+
+        // Generate content section (Row 4+ - Row 4 is labels)
+        function generateContentSection(row) {
+            const header = row[0] || '';
+            const link = row[1] || '';
+            const image = row[2] || '';
+            const text = row[3] || '';
+
+            // Skip empty rows and label rows
+            if (!header && !text && !image) return '';
+            
+            // Skip if this looks like a label row (contains "Field Name" or similar)
+            if (header.toLowerCase().includes('field') || header.toLowerCase().includes('section header')) return '';
+
+            let sectionHTML = `
+                <div class="content-section">
+                    <div class="container">
+            `;
+
+            if (header) {
+                if (link) {
+                    sectionHTML += `<h2><a href="${link}" target="_blank">${header}</a></h2>`;
+                } else {
+                    sectionHTML += `<h2>${header}</h2>`;
+                }
+            }
+
+            if (image) {
+                sectionHTML += `<img src="${image}" alt="${header}">`;
+            }
+
+            if (text) {
+                sectionHTML += `<p>${text}</p>`;
+            }
+
+            sectionHTML += `
+                    </div>
+                </div>
+            `;
+
+            return sectionHTML;
+        }
+
+        // Show error message
+        function showError(message) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="error-message">
+                    <h2>⚠️ Configuration Error</h2>
+                    <p>${message}</p>
+                    <ul>
+                        <li>Make sure you've replaced 'YOUR_SHEET_ID_HERE' with your actual Google Sheet ID</li>
+                        <li>Verify your Google Sheet is set to "Anyone with the link can view"</li>
+                        <li>Check that your sheet has tabs named "Sheet1" and "Styling"</li>
+                    </ul>
+                </div>
+            `;
+            document.getElementById('loading').classList.add('hidden');
+            content.classList.add('visible');
+        }
+
+        // Main function to build the website
+        async function buildWebsite() {
+            // Check if Sheet ID is configured
+            if (SHEET_ID === 'YOUR_SHEET_ID_HERE') {
+                showError('Please configure your Google Sheet ID in the index.html file.');
+                return;
+            }
+
+            // Fetch content data
+            const contentData = await fetchSheetData(CONTENT_URL);
+            if (!contentData) {
+                showError('Unable to fetch content from Google Sheet. Please check your Sheet ID and sharing settings.');
+                return;
+            }
+
+            // Fetch styling data (optional)
+            const stylingData = await fetchSheetData(STYLING_URL);
+            if (stylingData) {
+                applyCustomStyling(stylingData);
+            }
+
+            // Build the website
+            let websiteHTML = '';
+            let footerText = '';
+
+            // Process Row 2 (Site Header - Row 1 is labels)
+            if (contentData.length > 1) {
+                const { headerHTML, footerText: footer } = generateSiteHeader(contentData[1]);
+                websiteHTML += headerHTML;
+                footerText = footer;
+            }
+
+            // Process Row 4+ (Content Sections - Row 3 is empty, Row 4 is labels)
+            for (let i = 4; i < contentData.length; i++) {
+                websiteHTML += generateContentSection(contentData[i]);
+            }
+
+            // Add footer
+            if (footerText) {
+                websiteHTML += `
+                    <div class="site-footer">
+                        <div class="container">
+                            <p>${footerText}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Display the website
+            const content = document.getElementById('content');
+            content.innerHTML = websiteHTML;
+            
+            // Update page title if main header exists (Row 2, Column A)
+            if (contentData.length > 1 && contentData[1][0]) {
+                document.title = contentData[1][0];
+            }
+
+            // Hide loading, show content
+            document.getElementById('loading').classList.add('hidden');
+            content.classList.add('visible');
+        }
+
+        // Initialize the website when page loads
+        window.addEventListener('DOMContentLoaded', buildWebsite);
+    </script>
+</body>
+</html>
