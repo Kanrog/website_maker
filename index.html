@@ -46,7 +46,6 @@
         }
 
         /* Site Header */
-        /* Site Header (Row 2) */
         .site-header {
             text-align: center;
             padding: 60px 20px;
@@ -247,33 +246,37 @@
         function applyCustomStyling(stylingData) {
             if (!stylingData || stylingData.length < 2) return;
 
-            // Get colors and sizes by row position
-            // Row 0: labels
-            // Row 1: Main Header
-            // Row 2: Section Header  
-            // Row 3: Body Text
-            // Row 4: Background
-            // Row 5: Link Hover
-            
-            const mainHeaderColor = stylingData[1]?.[1] || '#ffffff';
-            const sectionHeaderColor = stylingData[2]?.[1] || '#333333';
-            const textColor = stylingData[3]?.[1] || '#555555';
-            const backgroundColor = stylingData[4]?.[1] || '#ffffff';
-            const linkColor = stylingData[5]?.[1] || '#667eea';
-            const headerBackgroundColor = stylingData[6]?.[1] || '#667eea';
-            
-            const mainHeaderSize = stylingData[1]?.[2] || '48px';
-            const sectionHeaderSize = stylingData[2]?.[2] || '32px';
-            const textSize = stylingData[3]?.[2] || '16px';
+            // Default styling values
+            const defaults = {
+                mainHeaderColor: '#ffffff',
+                sectionHeaderColor: '#333333',
+                textColor: '#555555',
+                backgroundColor: '#ffffff',
+                linkColor: '#667eea',
+                mainHeaderSize: '48px',
+                sectionHeaderSize: '32px',
+                textSize: '16px'
+            };
 
-            // Apply styles
+            // Get colors and sizes by row position
+            const mainHeaderColor = stylingData[1]?.[1] || defaults.mainHeaderColor;
+            const sectionHeaderColor = stylingData[2]?.[1] || defaults.sectionHeaderColor;
+            const textColor = stylingData[3]?.[1] || defaults.textColor;
+            const backgroundColor = stylingData[4]?.[1] || defaults.backgroundColor;
+            const linkColor = stylingData[5]?.[1] || defaults.linkColor;
+            
+            const mainHeaderSize = stylingData[1]?.[2] || defaults.mainHeaderSize;
+            const sectionHeaderSize = stylingData[2]?.[2] || defaults.sectionHeaderSize;
+            const textSize = stylingData[3]?.[2] || defaults.textSize;
+
+            // Apply styles dynamically
             const style = document.createElement('style');
             style.textContent = `
                 body {
                     background-color: ${backgroundColor};
                 }
                 .site-header {
-                    background-color: ${headerBackgroundColor};
+                    background: linear-gradient(135deg, ${linkColor} 0%, ${sectionHeaderColor} 100%);
                 }
                 .site-footer {
                     background-color: ${sectionHeaderColor};
@@ -301,7 +304,6 @@
                     color: ${mainHeaderColor};
                 }
             `;
-
             document.head.appendChild(style);
         }
 
@@ -389,9 +391,9 @@
                     <h2>⚠️ Configuration Error</h2>
                     <p>${message}</p>
                     <ul>
-                        <li>Make sure you've replaced 'YOUR_SHEET_ID_HERE' with your actual Google Sheet ID</li>
-                        <li>Verify your Google Sheet is set to "Anyone with the link can view"</li>
+                        <li>Make sure your Google Sheet is set to "Anyone with the link can view"</li>
                         <li>Check that your sheet has tabs named "Sheet1" and "Styling"</li>
+                        <li>Verify your sheet has the proper label rows (Row 1 and Row 4 in Content sheet)</li>
                     </ul>
                 </div>
             `;
@@ -401,12 +403,6 @@
 
         // Main function
         async function buildWebsite() {
-            // Check if Sheet ID is configured
-            if (SHEET_ID === 'YOUR_SHEET_ID_HERE') {
-                showError('Please configure your Google Sheet ID in the index.html file.');
-                return;
-            }
-
             // Fetch content data
             const contentData = await fetchSheetData(CONTENT_URL);
             if (!contentData) {
