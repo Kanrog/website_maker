@@ -246,62 +246,68 @@
         function applyCustomStyling(stylingData) {
             if (!stylingData || stylingData.length < 2) return;
 
-            // Default styling values
+            // Default styling values - Row index matches new sheet structure
             const defaults = {
-                mainHeaderColor: '#ffffff',
-                sectionHeaderColor: '#333333',
-                textColor: '#555555',
-                backgroundColor: '#ffffff',
-                linkColor: '#667eea',
-                mainHeaderSize: '48px',
+                siteHeaderBg: '#667eea',
+                siteHeaderText: '#ffffff',
+                siteHeaderSize: '48px',
+                sectionBg: '#f8f9fa',
+                sectionHeaderText: '#333333',
                 sectionHeaderSize: '32px',
-                textSize: '16px'
+                sectionBodyText: '#555555',
+                sectionBodySize: '16px',
+                footerBg: '#333333',
+                footerText: '#ffffff',
+                linkHoverColor: '#667eea'
             };
 
-            // Get colors and sizes by row position
-            const mainHeaderColor = stylingData[1]?.[1] || defaults.mainHeaderColor;
-            const sectionHeaderColor = stylingData[2]?.[1] || defaults.sectionHeaderColor;
-            const textColor = stylingData[3]?.[1] || defaults.textColor;
-            const backgroundColor = stylingData[4]?.[1] || defaults.backgroundColor;
-            const linkColor = stylingData[5]?.[1] || defaults.linkColor;
-            
-            const mainHeaderSize = stylingData[1]?.[2] || defaults.mainHeaderSize;
-            const sectionHeaderSize = stylingData[2]?.[2] || defaults.sectionHeaderSize;
-            const textSize = stylingData[3]?.[2] || defaults.textSize;
+            // Extract styling values - Row 0 is labels, so we start from Row 1
+            const siteHeaderBg = stylingData[1]?.[1] || defaults.siteHeaderBg;
+            const siteHeaderText = stylingData[2]?.[1] || defaults.siteHeaderText;
+            const siteHeaderSize = stylingData[2]?.[2] || defaults.siteHeaderSize;
+            const sectionBg = stylingData[3]?.[1] || defaults.sectionBg;
+            const sectionHeaderText = stylingData[4]?.[1] || defaults.sectionHeaderText;
+            const sectionHeaderSize = stylingData[4]?.[2] || defaults.sectionHeaderSize;
+            const sectionBodyText = stylingData[5]?.[1] || defaults.sectionBodyText;
+            const sectionBodySize = stylingData[5]?.[2] || defaults.sectionBodySize;
+            const footerBg = stylingData[6]?.[1] || defaults.footerBg;
+            const footerText = stylingData[7]?.[1] || defaults.footerText;
+            const linkHoverColor = stylingData[8]?.[1] || defaults.linkHoverColor;
 
-            // Apply styles dynamically
+            // Apply styles dynamically - NO GRADIENTS
             const style = document.createElement('style');
             style.textContent = `
                 body {
-                    background-color: ${backgroundColor};
+                    background-color: ${sectionBg};
                 }
                 .site-header {
-                    background: linear-gradient(135deg, ${linkColor} 0%, ${sectionHeaderColor} 100%);
+                    background-color: ${siteHeaderBg};
                 }
                 .site-footer {
-                    background-color: ${sectionHeaderColor};
+                    background-color: ${footerBg};
+                    color: ${footerText};
                 }
                 .content-section:nth-child(even) {
-                    background-color: ${backgroundColor}ee;
+                    background-color: ${sectionBg}dd;
                 }
                 .site-header h1 {
-                    color: ${mainHeaderColor};
-                    font-size: ${mainHeaderSize};
+                    color: ${siteHeaderText};
+                    font-size: ${siteHeaderSize};
                 }
                 .content-section h2 {
-                    color: ${sectionHeaderColor};
+                    color: ${sectionHeaderText};
                     font-size: ${sectionHeaderSize};
                 }
                 .content-section p {
-                    color: ${textColor};
-                    font-size: ${textSize};
+                    color: ${sectionBodyText};
+                    font-size: ${sectionBodySize};
                 }
                 .content-section h2 a:hover {
-                    color: ${linkColor};
+                    color: ${linkHoverColor};
                 }
                 .site-header .slogan,
                 .site-header .intro-text {
-                    color: ${mainHeaderColor};
+                    color: ${siteHeaderText};
                 }
             `;
             document.head.appendChild(style);
