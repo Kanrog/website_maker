@@ -246,33 +246,18 @@
         function applyCustomStyling(stylingData) {
             if (!stylingData || stylingData.length < 2) return;
 
-            // Default styling values - Row index matches new sheet structure
-            const defaults = {
-                siteHeaderBg: '#667eea',
-                siteHeaderText: '#ffffff',
-                siteHeaderSize: '48px',
-                sectionBg: '#f8f9fa',
-                sectionHeaderText: '#333333',
-                sectionHeaderSize: '32px',
-                sectionBodyText: '#555555',
-                sectionBodySize: '16px',
-                footerBg: '#333333',
-                footerText: '#ffffff',
-                linkHoverColor: '#667eea'
-            };
-
-            // Extract styling values - Row 0 is labels, so we start from Row 1
-            const siteHeaderBg = stylingData[1]?.[1] || defaults.siteHeaderBg;
-            const siteHeaderText = stylingData[2]?.[1] || defaults.siteHeaderText;
-            const siteHeaderSize = stylingData[2]?.[2] || defaults.siteHeaderSize;
-            const sectionBg = stylingData[3]?.[1] || defaults.sectionBg;
-            const sectionHeaderText = stylingData[4]?.[1] || defaults.sectionHeaderText;
-            const sectionHeaderSize = stylingData[4]?.[2] || defaults.sectionHeaderSize;
-            const sectionBodyText = stylingData[5]?.[1] || defaults.sectionBodyText;
-            const sectionBodySize = stylingData[5]?.[2] || defaults.sectionBodySize;
-            const footerBg = stylingData[6]?.[1] || defaults.footerBg;
-            const footerText = stylingData[7]?.[1] || defaults.footerText;
-            const linkHoverColor = stylingData[8]?.[1] || defaults.linkHoverColor;
+            // Extract styling values by row index (Row 0 is labels)
+            const siteHeaderBg = stylingData[1]?.[1] || '#667eea';
+            const siteHeaderText = stylingData[2]?.[1] || '#ffffff';
+            const siteHeaderSize = stylingData[2]?.[2] || '48px';
+            const sectionBg = stylingData[3]?.[1] || '#f8f9fa';
+            const sectionHeaderText = stylingData[4]?.[1] || '#333333';
+            const sectionHeaderSize = stylingData[4]?.[2] || '32px';
+            const sectionBodyText = stylingData[5]?.[1] || '#555555';
+            const sectionBodySize = stylingData[5]?.[2] || '16px';
+            const footerBg = stylingData[6]?.[1] || '#333333';
+            const footerText = stylingData[7]?.[1] || '#ffffff';
+            const linkHoverColor = stylingData[8]?.[1] || '#667eea';
 
             // Apply styles dynamically - NO GRADIENTS
             const style = document.createElement('style');
@@ -422,7 +407,7 @@
             // Fetch styling data
             const stylingData = await fetchSheetData(STYLING_URL);
             if (stylingData) {
-                console.log('Styling data:', stylingData.slice(0, 6));
+                console.log('Styling data:', stylingData.slice(0, 9));
                 applyCustomStyling(stylingData);
             }
 
