@@ -234,6 +234,8 @@
                     }
                 }
                 row.push(currentField.trim());
+                
+                // ALWAYS push the row, even if empty - this preserves row numbering
                 result.push(row);
             }
             
@@ -365,8 +367,11 @@
             // Skip empty rows and label rows
             if (!header && !text && !image) return '';
             
-            // Skip if this looks like a label row
-            if (header.toLowerCase().includes('section header') || header.toLowerCase().includes('field name')) return '';
+            // Skip if this looks like a label row or placeholder (---, --)
+            if (header.toLowerCase().includes('section header') || 
+                header.toLowerCase().includes('field name') ||
+                header === '---' || header === '--' || 
+                header.trim() === '' || header.trim() === '-') return '';
 
             let sectionHTML = `
                 <div class="content-section">
