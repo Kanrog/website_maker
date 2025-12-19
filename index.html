@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
+    <title>Free Website Template with Google Sheets CMS - Debug Version</title>
     <style>
         * {
             margin: 0;
@@ -12,9 +12,10 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Arial', sans-serif;
             line-height: 1.6;
             color: #333;
+            background-color: #f0f0f0;
         }
 
         .container {
@@ -23,437 +24,605 @@
             padding: 0 20px;
         }
 
-        /* Loading State */
-        #loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-size: 24px;
-            color: #666;
+        /* Debug Panel */
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 400px;
+            max-height: 80vh;
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-y: auto;
+            z-index: 10000;
+            font-family: monospace;
+            font-size: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
-        #loading.hidden {
-            display: none;
+        .debug-panel h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #d32f2f;
         }
 
-        #content {
-            display: none;
+        .debug-section {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
         }
 
-        #content.visible {
-            display: block;
+        .debug-section h4 {
+            margin-bottom: 5px;
+            color: #1976d2;
+            font-size: 12px;
         }
 
-        /* Site Header */
+        .debug-content {
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .debug-error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .debug-success {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        /* Website Styles (will be overridden by Google Sheets) */
         .site-header {
-            text-align: center;
-            padding: 60px 20px;
+            background-color: #2196F3;
             color: white;
+            padding: 60px 0;
+            text-align: center;
         }
 
-        .site-header h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            font-weight: 700;
+        .site-title {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
-        .site-header .hero-image {
-            max-width: 100%;
-            height: auto;
-            max-height: 400px;
-            margin: 30px auto;
+        .site-hero {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            object-fit: cover;
+            margin: 20px auto;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .site-header .slogan {
-            font-size: 24px;
-            margin: 20px 0;
-            font-weight: 300;
+        .site-slogan {
+            font-size: 1.5em;
+            margin-bottom: 20px;
             font-style: italic;
         }
 
-        .site-header .intro-text {
-            font-size: 18px;
+        .site-intro {
+            font-size: 1.1em;
             max-width: 800px;
-            margin: 20px auto;
-            line-height: 1.8;
+            margin: 0 auto;
         }
 
-        /* Content Sections */
         .content-section {
-            padding: 60px 20px;
-            border-bottom: 1px solid #eee;
+            background-color: white;
+            padding: 40px 0;
+            margin: 20px 0;
+            border-radius: 10px;
         }
 
-        .content-section:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .content-section h2 {
-            font-size: 32px;
+        .section-header {
+            font-size: 2em;
             margin-bottom: 20px;
             color: #333;
-        }
-
-        .content-section h2 a {
-            color: inherit;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .content-section h2 a:hover {
-            color: #667eea;
-        }
-
-        .content-section img {
-            max-width: 100%;
-            height: auto;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .content-section p {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #555;
-            max-width: 800px;
-        }
-
-        /* Footer */
-        .site-footer {
             text-align: center;
-            padding: 40px 20px;
+        }
+
+        .section-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .section-image {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .section-text {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .site-footer {
             background-color: #333;
             color: white;
-            font-size: 16px;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .site-header h1 {
-                font-size: 32px;
-            }
-
-            .site-header .slogan {
-                font-size: 18px;
-            }
-
-            .site-header .intro-text {
-                font-size: 16px;
-            }
-
-            .content-section h2 {
-                font-size: 24px;
-            }
-
-            .content-section {
-                padding: 40px 20px;
-            }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
         }
 
-        /* Error Message */
-        .error-message {
-            background-color: #fee;
-            border: 2px solid #fcc;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 40px auto;
-            max-width: 800px;
-            color: #c33;
+        .error {
+            text-align: center;
+            padding: 50px;
+            color: #d32f2f;
+            background-color: #ffebee;
+            margin: 20px;
+            border-radius: 10px;
         }
 
-        .error-message h2 {
-            margin-bottom: 10px;
+        .section-link {
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .error-message ul {
-            margin-left: 20px;
-            margin-top: 10px;
+        .section-link a {
+            display: inline-block;
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .section-link a:hover {
+            background-color: #1976D2;
         }
     </style>
 <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
 <body>
-    <div id="loading">Loading your website...</div>
-    
-    <div id="content">
-        <!-- Content will be dynamically generated here -->
+    <!-- Debug Panel -->
+    <div class="debug-panel" id="debugPanel">
+        <h3>🔍 Debug Panel</h3>
+        <div id="debugContent">
+            <div class="debug-section">
+                <h4>Status:</h4>
+                <div class="debug-content">Initializing...</div>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // CONFIGURATION
-        const SHEET_ID = '1xanlmg5nOmLs5rTFBV3P9bCVNVabNFIdF9x_ilDIx0Q';
-        const CONTENT_SHEET_NAME = 'Sheet1';
-        const STYLING_SHEET_NAME = 'Styling';
-        
-        // URLs
-        const CONTENT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${CONTENT_SHEET_NAME}`;
-        const STYLING_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${STYLING_SHEET_NAME}`;
+    <!-- Loading Message -->
+    <div id="loading" class="loading">
+        Loading website content from Google Sheets...
+    </div>
 
-        // Parse CSV
-        function parseCSV(csv) {
-            const lines = csv.split('\n');
-            const result = [];
+    <!-- Error Message (hidden by default) -->
+    <div id="error" class="error" style="display: none;">
+        Error loading content. Please check your Google Sheet URL and make sure it's publicly accessible.
+    </div>
+
+    <!-- Website Content (populated by JavaScript) -->
+    <div id="website" style="display: none;">
+        <!-- Site Header -->
+        <header class="site-header">
+            <div class="container">
+                <h1 class="site-title" id="siteTitle">Website Title</h1>
+                <img class="site-hero" id="siteHero" src="https://via.placeholder.com/600x300/2196F3/FFFFFF?text=Your+Hero+Image" alt="Hero Image">
+                <p class="site-slogan" id="siteSlogan">Your Website Slogan</p>
+                <p class="site-intro" id="siteIntro">Welcome to your website! This content is loaded from Google Sheets.</p>
+            </div>
+        </header>
+
+        <!-- Content Sections (populated by JavaScript) -->
+        <main id="contentSections">
+            <!-- Sections will be added here dynamically -->
+        </main>
+
+        <!-- Site Footer -->
+        <footer class="site-footer">
+            <div class="container">
+                <p id="siteFooter">© 2024 Your Website. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Include Papa Parse for better CSV handling -->
+    <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    
+    <script>
+        // Debug logging function
+        function debugLog(message, type = 'info') {
+            const debugContent = document.getElementById('debugContent');
+            const timestamp = new Date().toLocaleTimeString();
+            const cssClass = type === 'error' ? 'debug-error' : type === 'success' ? 'debug-success' : '';
             
-            for (let line of lines) {
-                const row = [];
-                let currentField = '';
-                let inQuotes = false;
+            const debugEntry = document.createElement('div');
+            debugEntry.className = 'debug-section';
+            debugEntry.innerHTML = `
+                <h4>[${timestamp}] ${type.toUpperCase()}</h4>
+                <div class="debug-content ${cssClass}">${message}</div>
+            `;
+            
+            debugContent.appendChild(debugEntry);
+            debugContent.scrollTop = debugContent.scrollHeight;
+            
+            // Also log to console
+            console.log(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+        }
+
+        // Configuration
+        const SHEET_ID = '2PACX-1vQk5bXrLZDv8kRuSAMn4yQFwzux46d60T_AFhfU4-ZMNyB8X-TiHapOLh0uyd-TuAURW8JiEotzT5Fn';
+        const CONTENT_GID = '0';  // Content sheet
+        const STYLING_GID = '2066685483';  // Styling sheet
+
+        // Fetch CSV data
+        async function fetchCSVData(gid) {
+            try {
+                // Use the published URL format
+                const publishedUrl = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv&gid=${gid}`;
+                debugLog(`Fetching from published CSV URL: ${publishedUrl}`, 'info');
                 
-                for (let i = 0; i < line.length; i++) {
-                    const char = line[i];
-                    
-                    if (char === '"') {
-                        if (inQuotes && line[i + 1] === '"') {
-                            currentField += '"';
-                            i++;
-                        } else {
-                            inQuotes = !inQuotes;
-                        }
-                    } else if (char === ',' && !inQuotes) {
-                        row.push(currentField.trim());
-                        currentField = '';
-                    } else {
-                        currentField += char;
+                const response = await fetch(publishedUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}. Please ensure your sheet is published to the web with CSV format enabled.`);
+                }
+                
+                const csvText = await response.text();
+                debugLog(`Published CSV URL worked!`, 'success');
+                debugLog(`Raw CSV data (first 200 chars): ${csvText.substring(0, 200)}...`, 'info');
+                debugLog(`Total CSV length: ${csvText.length} characters`, 'info');
+                
+                return csvText;
+            } catch (error) {
+                debugLog(`Error fetching CSV: ${error.message}`, 'error');
+                throw error;
+            }
+        }
+
+        // Parse CSV using Papa Parse
+        function parseCSV(csvText) {
+            try {
+                debugLog('Starting CSV parsing with Papa Parse...', 'info');
+                
+                const results = Papa.parse(csvText, {
+                    skipEmptyLines: false,  // Don't skip empty lines - we need to see structure
+                    delimiter: ',',        // Force comma delimiter
+                    quoteChar: '"',
+                    escapeChar: '"'
+                });
+                
+                debugLog(`Parse completed. Data rows: ${results.data.length}`, 'info');
+                debugLog(`Parse errors: ${results.errors.length}`, results.errors.length > 0 ? 'error' : 'success');
+                
+                if (results.errors.length > 0) {
+                    results.errors.forEach(error => {
+                        debugLog(`Parse error: ${error.message} (row ${error.row})`, 'error');
+                    });
+                }
+                
+                // Log each row for debugging
+                results.data.forEach((row, index) => {
+                    debugLog(`Row ${index}: [${row.map(cell => `"${cell}"`).join(', ')}]`, 'info');
+                });
+                
+                return results.data;
+            } catch (error) {
+                debugLog(`Error parsing CSV: ${error.message}`, 'error');
+                throw error;
+            }
+        }
+
+        // Extract data from parsed content
+        function extractContentData(data) {
+            try {
+                debugLog('Extracting content data...', 'info');
+                
+                // Find header row and content start
+                let headerRowIndex = -1;
+                let contentStartIndex = -1;
+                
+                // Look for the site header row (contains actual data)
+                for (let i = 0; i < data.length; i++) {
+                    const row = data[i];
+                    if (row.length > 0 && row[0] && row[0].includes('Site Title')) {
+                        headerRowIndex = i + 1;  // Actual data is in the next row
+                        break;
                     }
                 }
-                row.push(currentField.trim());
-                result.push(row);
-            }
-            
-            return result;
-        }
-
-        // Fetch data
-        async function fetchSheetData(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                
+                // Look for sections header row
+                for (let i = 0; i < data.length; i++) {
+                    const row = data[i];
+                    if (row.length > 0 && row[0] && row[0].includes('Section Header')) {
+                        contentStartIndex = i + 1;  // Actual content starts after this row
+                        break;
+                    }
                 }
-                const csv = await response.text();
-                return parseCSV(csv);
+                
+                debugLog(`Header row index: ${headerRowIndex}`, 'info');
+                debugLog(`Content start index: ${contentStartIndex}`, 'info');
+                
+                if (headerRowIndex === -1) {
+                    throw new Error('Could not find site header data row');
+                }
+                
+                if (contentStartIndex === -1) {
+                    throw new Error('Could not find sections data start row');
+                }
+                
+                // Extract site header data
+                const headerRow = data[headerRowIndex];
+                debugLog(`Header row found: [${headerRow.map(cell => `"${cell}"`).join(', ')}]`, 'info');
+                
+                const siteData = {
+                    title: headerRow[1] || '',
+                    heroImage: headerRow[2] || '',
+                    slogan: headerRow[3] || '',
+                    intro: headerRow[4] || '',
+                    footer: headerRow[5] || ''
+                };
+                
+                debugLog(`Site data extracted: ${JSON.stringify(siteData)}`, 'success');
+                
+                // Extract content sections
+                const sections = [];
+                for (let i = contentStartIndex; i < data.length; i++) {
+                    const row = data[i];
+                    debugLog(`Processing section row ${i}: [${row.map(cell => `"${cell}"`).join(', ')}]`, 'info');
+                    
+                    // Skip completely empty rows
+                    if (row.every(cell => !cell || cell.trim() === '')) {
+                        debugLog(`Skipping empty row ${i}`, 'info');
+                        continue;
+                    }
+                    
+                    // Make sure we have at least the header column
+                    if (row.length > 0 && row[0] && row[0].trim() !== '') {
+                        const section = {
+                            header: row[0] || '',
+                            link: row[1] || '',
+                            image: row[2] || '',
+                            text: row[3] || ''
+                        };
+                        
+                        debugLog(`Section extracted: ${JSON.stringify(section)}`, 'success');
+                        sections.push(section);
+                    } else {
+                        debugLog(`Skipping invalid section row ${i}`, 'info');
+                    }
+                }
+                
+                debugLog(`Total sections found: ${sections.length}`, 'success');
+                
+                return { siteData, sections };
             } catch (error) {
-                console.error('Error fetching sheet data:', error);
-                return null;
+                debugLog(`Error extracting content: ${error.message}`, 'error');
+                throw error;
             }
         }
 
-        // Apply styling
-        function applyCustomStyling(stylingData) {
-            if (!stylingData || stylingData.length < 2) return;
-
-            // Extract styling values by row index (Row 0 is labels)
-            const siteHeaderBg = stylingData[1]?.[1] || '#667eea';
-            const siteHeaderText = stylingData[2]?.[1] || '#ffffff';
-            const siteHeaderSize = stylingData[2]?.[2] || '48px';
-            const sectionBg = stylingData[3]?.[1] || '#f8f9fa';
-            const sectionHeaderText = stylingData[4]?.[1] || '#333333';
-            const sectionHeaderSize = stylingData[4]?.[2] || '32px';
-            const sectionBodyText = stylingData[5]?.[1] || '#555555';
-            const sectionBodySize = stylingData[5]?.[2] || '16px';
-            const footerBg = stylingData[6]?.[1] || '#333333';
-            const footerText = stylingData[7]?.[1] || '#ffffff';
-            const linkHoverColor = stylingData[8]?.[1] || '#667eea';
-
-            // Apply styles dynamically - NO GRADIENTS
-            const style = document.createElement('style');
-            style.textContent = `
-                body {
-                    background-color: ${sectionBg};
+        // Extract styling data
+        function extractStylingData(data) {
+            try {
+                debugLog('Extracting styling data...', 'info');
+                
+                const styles = {
+                    headerBg: '#2196F3',
+                    headerText: '#FFFFFF',
+                    sectionBg: '#FFFFFF',
+                    sectionText: '#333333',
+                    footerBg: '#333333',
+                    footerText: '#FFFFFF'
+                };
+                
+                // Find styling data row (skip header row)
+                for (let i = 1; i < data.length; i++) {
+                    const row = data[i];
+                    if (row.length >= 6 && row[0] && row[0].trim() !== '') {
+                        styles.headerBg = row[0] || styles.headerBg;
+                        styles.headerText = row[1] || styles.headerText;
+                        styles.sectionBg = row[2] || styles.sectionBg;
+                        styles.sectionText = row[3] || styles.sectionText;
+                        styles.footerBg = row[4] || styles.footerBg;
+                        styles.footerText = row[5] || styles.footerText;
+                        break;
+                    }
                 }
-                .site-header {
-                    background-color: ${siteHeaderBg};
-                }
-                .site-footer {
-                    background-color: ${footerBg};
-                    color: ${footerText};
-                }
-                .content-section:nth-child(even) {
-                    background-color: ${sectionBg}dd;
-                }
-                .site-header h1 {
-                    color: ${siteHeaderText};
-                    font-size: ${siteHeaderSize};
-                }
-                .content-section h2 {
-                    color: ${sectionHeaderText};
-                    font-size: ${sectionHeaderSize};
-                }
-                .content-section p {
-                    color: ${sectionBodyText};
-                    font-size: ${sectionBodySize};
-                }
-                .content-section h2 a:hover {
-                    color: ${linkHoverColor};
-                }
-                .site-header .slogan,
-                .site-header .intro-text {
-                    color: ${siteHeaderText};
-                }
-            `;
-            document.head.appendChild(style);
+                
+                debugLog(`Styling data extracted: ${JSON.stringify(styles)}`, 'success');
+                return styles;
+            } catch (error) {
+                debugLog(`Error extracting styling: ${error.message}`, 'error');
+                // Return default styles on error
+                return {
+                    headerBg: '#2196F3',
+                    headerText: '#FFFFFF',
+                    sectionBg: '#FFFFFF',
+                    sectionText: '#333333',
+                    footerBg: '#333333',
+                    footerText: '#FFFFFF'
+                };
+            }
         }
 
-        // Generate site header (Row 2 in sheet)
-        function generateSiteHeader(row) {
-            // Row structure: | Field Name | Main Site Title | Hero Image URL | Site Slogan | Introduction Text | Footer Text |
-            const mainHeader = row[1] || 'Welcome to My Website'; // Column B
-            const heroImage = row[2] || ''; // Column C
-            const slogan = row[3] || ''; // Column D
-            const introText = row[4] || ''; // Column E
-            const footerText = row[5] || ''; // Column F
-
-            let headerHTML = `
-                <div class="site-header">
-                    <div class="container">
-                        <h1>${mainHeader}</h1>
-            `;
-
-            if (heroImage) {
-                headerHTML += `<img src="${heroImage}" alt="Hero Image" class="hero-image">`;
+        // Apply styling to the website
+        function applyStyling(styles) {
+            try {
+                debugLog('Applying styling...', 'info');
+                
+                document.body.style.backgroundColor = styles.sectionBg;
+                
+                document.querySelector('.site-header').style.backgroundColor = styles.headerBg;
+                document.querySelector('.site-header').style.color = styles.headerText;
+                
+                const sections = document.querySelectorAll('.content-section');
+                sections.forEach(section => {
+                    section.style.backgroundColor = styles.sectionBg;
+                    section.style.color = styles.sectionText;
+                });
+                
+                document.querySelector('.site-footer').style.backgroundColor = styles.footerBg;
+                document.querySelector('.site-footer').style.color = styles.footerText;
+                
+                debugLog('Styling applied successfully', 'success');
+            } catch (error) {
+                debugLog(`Error applying styling: ${error.message}`, 'error');
             }
-
-            if (slogan) {
-                headerHTML += `<p class="slogan">${slogan}</p>`;
-            }
-
-            if (introText) {
-                headerHTML += `<p class="intro-text">${introText}</p>`;
-            }
-
-            headerHTML += `
-                    </div>
-                </div>
-            `;
-
-            return { headerHTML, footerText };
         }
 
-        // Generate content section (Row 5+ in sheet)
-        function generateContentSection(row) {
-            // Row structure: | Section Header | Link URL (optional) | Image URL (optional) | Section Text Content |
-            const header = row[0] || ''; // Column A
-            const link = row[1] || ''; // Column B
-            const image = row[2] || ''; // Column C
-            const text = row[3] || ''; // Column D
-
-            // Skip empty rows and label rows
-            if (!header && !text && !image) return '';
-            if (header.toLowerCase().includes('section header') || header.toLowerCase().includes('field name')) return '';
-
-            let sectionHTML = `
-                <div class="content-section">
-                    <div class="container">
-            `;
-
-            if (header) {
-                if (link) {
-                    sectionHTML += `<h2><a href="${link}" target="_blank">${header}</a></h2>`;
-                } else {
-                    sectionHTML += `<h2>${header}</h2>`;
+        // Populate website content
+        function populateWebsite(siteData, sections) {
+            try {
+                debugLog('Populating website content...', 'info');
+                
+                // Update site header
+                document.getElementById('siteTitle').textContent = siteData.title || 'Website Title';
+                
+                const heroImg = document.getElementById('siteHero');
+                if (siteData.heroImage) {
+                    heroImg.src = siteData.heroImage;
+                    heroImg.style.display = 'block';
                 }
-            }
-
-            if (image) {
-                sectionHTML += `<img src="${image}" alt="${header}">`;
-            }
-
-            if (text) {
-                sectionHTML += `<p>${text}</p>`;
-            }
-
-            sectionHTML += `
-                    </div>
-                </div>
-            `;
-
-            return sectionHTML;
-        }
-
-        // Show error message
-        function showError(message) {
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <div class="error-message">
-                    <h2>⚠️ Configuration Error</h2>
-                    <p>${message}</p>
-                    <ul>
-                        <li>Make sure your Google Sheet is set to "Anyone with the link can view"</li>
-                        <li>Check that your sheet has tabs named "Sheet1" and "Styling"</li>
-                        <li>Verify your sheet has the proper label rows (Row 1 and Row 4 in Content sheet)</li>
-                    </ul>
-                </div>
-            `;
-            document.getElementById('loading').classList.add('hidden');
-            content.classList.add('visible');
-        }
-
-        // Main function
-        async function buildWebsite() {
-            // Fetch content data
-            const contentData = await fetchSheetData(CONTENT_URL);
-            if (!contentData) {
-                showError('Unable to fetch content from Google Sheet. Please check your Sheet ID and sharing settings.');
-                return;
-            }
-
-            // Debug: Show first few rows
-            console.log('Content data:', contentData.slice(0, 6));
-
-            // Fetch styling data
-            const stylingData = await fetchSheetData(STYLING_URL);
-            if (stylingData) {
-                console.log('Styling data:', stylingData.slice(0, 9));
-                applyCustomStyling(stylingData);
-            }
-
-            // Build the website
-            let websiteHTML = '';
-            let footerText = '';
-
-            // Process Row 2 (Site Header)
-            if (contentData.length > 1) {
-                const { headerHTML, footerText: footer } = generateSiteHeader(contentData[1]);
-                websiteHTML += headerHTML;
-                footerText = footer;
-            }
-
-            // Process Row 5+ (Content Sections)
-            for (let i = 4; i < contentData.length; i++) {
-                websiteHTML += generateContentSection(contentData[i]);
-            }
-
-            // Add footer
-            if (footerText) {
-                websiteHTML += `
-                    <div class="site-footer">
-                        <div class="container">
-                            <p>${footerText}</p>
+                
+                document.getElementById('siteSlogan').textContent = siteData.slogan || 'Your Website Slogan';
+                document.getElementById('siteIntro').textContent = siteData.intro || 'Welcome to your website!';
+                document.getElementById('siteFooter').textContent = siteData.footer || '© 2024 Your Website. All rights reserved.';
+                
+                // Clear existing sections
+                const contentSections = document.getElementById('contentSections');
+                contentSections.innerHTML = '';
+                
+                // Add content sections
+                sections.forEach((section, index) => {
+                    debugLog(`Creating section ${index + 1}: ${section.header}`, 'info');
+                    
+                    const sectionDiv = document.createElement('div');
+                    sectionDiv.className = 'content-section';
+                    
+                    let sectionHTML = '<div class="container">';
+                    
+                    // Add link if provided
+                    if (section.link && section.link.trim() !== '') {
+                        sectionHTML += `
+                            <div class="section-link">
+                                <a href="${section.link}" target="_blank">Learn More</a>
+                            </div>
+                        `;
+                    }
+                    
+                    sectionHTML += `
+                        <h2 class="section-header">${section.header || 'Section Title'}</h2>
+                        <div class="section-content">
+                    `;
+                    
+                    // Add image if provided
+                    if (section.image && section.image.trim() !== '') {
+                        sectionHTML += `
+                            <img class="section-image" src="${section.image}" alt="${section.header}">
+                        `;
+                    }
+                    
+                    // Add text if provided
+                    if (section.text && section.text.trim() !== '') {
+                        sectionHTML += `
+                            <div class="section-text">${section.text}</div>
+                        `;
+                    }
+                    
+                    sectionHTML += `
                         </div>
-                    </div>
-                `;
+                        </div>
+                    `;
+                    
+                    sectionDiv.innerHTML = sectionHTML;
+                    contentSections.appendChild(sectionDiv);
+                    
+                    debugLog(`Section ${index + 1} added successfully`, 'success');
+                });
+                
+                debugLog('Website populated successfully', 'success');
+            } catch (error) {
+                debugLog(`Error populating website: ${error.message}`, 'error');
+                throw error;
             }
-
-            // Display the website
-            const content = document.getElementById('content');
-            content.innerHTML = websiteHTML;
-            
-            // Update page title
-            if (contentData.length > 1 && contentData[1][1]) {
-                document.title = contentData[1][1];
-            }
-
-            // Hide loading, show content
-            document.getElementById('loading').classList.add('hidden');
-            content.classList.add('visible');
         }
 
-        // Initialize the website when page loads
-        window.addEventListener('DOMContentLoaded', buildWebsite);
+        // Main function to load and display website
+        async function loadWebsite() {
+            try {
+                debugLog('Starting website load process...', 'info');
+                
+                // Show loading, hide error and website
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('error').style.display = 'none';
+                document.getElementById('website').style.display = 'none';
+                
+                // Fetch content data
+                debugLog('Fetching content data...', 'info');
+                const contentCSV = await fetchCSVData(CONTENT_GID);
+                const contentData = parseCSV(contentCSV);
+                const { siteData, sections } = extractContentData(contentData);
+                
+                // Fetch styling data
+                debugLog('Fetching styling data...', 'info');
+                const stylingCSV = await fetchCSVData(STYLING_GID);
+                const stylingData = parseCSV(stylingCSV);
+                const styles = extractStylingData(stylingData);
+                
+                // Apply styling first
+                applyStyling(styles);
+                
+                // Populate content
+                populateWebsite(siteData, sections);
+                
+                // Hide loading, show website
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('website').style.display = 'block';
+                
+                debugLog('Website loaded successfully!', 'success');
+                
+            } catch (error) {
+                debugLog(`Failed to load website: ${error.message}`, 'error');
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                
+                // Provide helpful error message
+                let errorMessage = error.message;
+                if (errorMessage.includes('publish')) {
+                    errorMessage = `Please publish your Google Sheet to the web:
+1. Open your Google Sheet
+2. Go to File > Share > Publish to web
+3. Select "Entire Document" 
+4. Choose "CSV" format
+5. Click "Publish"
+6. Copy the link and update the SHEET_ID if needed`;
+                }
+                
+                document.getElementById('error').innerHTML = `Error: ${errorMessage}`;
+            }
+        }
+
+        // Load website when page loads
+        document.addEventListener('DOMContentLoaded', loadWebsite);
     </script>
 </body>
 </html>
