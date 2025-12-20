@@ -37,8 +37,8 @@ Create your own website for **FREE** using GitHub Pages and Google Sheets.
 
 1. Open `index.html` in your forked repository
 2. Click the edit pencil icon
-3. Find: `const SHEET_ID = 'YOUR_SHEET_ID_HERE';`
-4. Replace with your actual Sheet ID
+3. Find: `const SHEET_ID` on line _194_
+4. Replace the example ID with your actual Sheet ID
 5. Commit the change
 
 ### 5. Add Images to Your Repository
