@@ -10,6 +10,32 @@ Have a look at my example site - https://kanrog.github.io/website_maker/
 
 Transform a Google Sheet into a live website in 15 minutes. Perfect for projects, portfolios, event promotions, and personal websites. No coding, no hosting fees, no complications.
 
+## What You Get
+
+- **Edit Like a Spreadsheet** - Update your entire website from Google Sheets
+- **Host for Free** - Deploy on GitHub Pages with zero costs
+- **Go Live Instantly** - Changes appear within seconds
+- **No Technical Skills Required** - Perfect for non-developers
+- **Own Your Content** - Complete control over your site and data
+
+## What It's Not
+
+- **Not a Backend Solution** - No user accounts, logins, or databases
+- **Not for Complex Apps** - Limited to static content
+- **Not E-Commerce Ready** - Can't handle transactions or inventory
+- **Requires GitHub** - You'll need a basic understanding of Git
+
+## Best For
+
+✅ Quick project showcases and portfolios
+✅ Event websites and landing pages
+✅ Personal brands and online presence
+✅ Static content that doesn't change frequently
+
+---
+
+**Perfect if you need a simple, professional website fast. Not ideal for complex applications.**
+
 ## What You Need
 
 - A GitHub account (free)
