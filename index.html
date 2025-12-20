@@ -274,6 +274,7 @@ function applyCustomStyling(stylingData) {
     const sectionHeaderSize = getValueByLabel('Section Header Text', 2);
     const sectionBodyText = getValueByLabel('Section Body Text', 1);
     const sectionBodySize = getValueByLabel('Section Body Text', 2);
+    const sectionBg = getValueByLabel('Section Background', 1);
     const footerBg = getValueByLabel('Footer Background', 1);
     const footerText = getValueByLabel('Footer Text', 1);
     const linkHoverColor = getValueByLabel('Link Hover Color', 1);
@@ -289,6 +290,7 @@ function applyCustomStyling(stylingData) {
     if (sectionHeaderSize) styleContent += `.content-section h2 { font-size: ${sectionHeaderSize}; }`;
     if (sectionBodyText) styleContent += `.content-section p { color: ${sectionBodyText}; }`;
     if (sectionBodySize) styleContent += `.content-section p { font-size: ${sectionBodySize}; }`;
+    if (sectionBg) styleContent += `.content-section { background-color: ${sectionBg}; }`;
     if (footerBg) styleContent += `.site-footer { background-color: ${footerBg}; }`;
     if (footerText) styleContent += `.site-footer { color: ${footerText}; }`;
     if (linkHoverColor) styleContent += `.content-section h2 a:hover { color: ${linkHoverColor}; }`;
