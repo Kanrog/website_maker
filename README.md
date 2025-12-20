@@ -10,27 +10,29 @@ Create your own website for **FREE** using GitHub Pages and Google Sheets.
 
 ## Setup
 
-### 1. Fork This Repository
+### 1. Create a GitHub Repository
 
-Click "Fork" at the top right of this page.
+1. Go to https://github.com/new
+2. Name your repository: `YOUR_USERNAME.github.io` (replace `YOUR_USERNAME` with your actual GitHub username)
+   - This naming convention gives you a clean URL without `/website` at the end
+   - Example: If your username is `kanrog`, name it `kanrog.github.io` for the URL `https://kanrog.github.io`
+3. Set it to **Public**
+4. Click "Create repository"
 
-### 2. Create a Google Sheet
+### 2. Fork This Repository
 
-**Option A: Quick Start (Recommended)**
-1. Click this link to make a copy of the template sheet: [Copy Template Sheet](https://docs.google.com/spreadsheets/d/1xanlmg5nOmLs5rTFBV3P9bCVNVabNFIdF9x_ilDIx0Q/copy)
+1. Go to this repository and click "Fork" at the top right
+2. In the fork settings, change the repository name to match your `YOUR_USERNAME.github.io` name
+3. Click "Create fork"
+
+### 3. Create a Google Sheet
+
+1. Click this link to make a copy of the template sheet: [Copy Template Sheet](https://docs.google.com/spreadsheets/d/1cLMaglrhcWkKaleRF6-ZwZtvSn0eNT9xfonY_QfRP1s/copy)
 2. A new sheet will be created in your Google Drive - this is your copy to edit
 3. Copy your Sheet ID from the URL: `https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit`
+4. Click "Share" → "Change to anyone with the link" → Select "Viewer"
 
-**Option B: Manual Setup**
-1. Go to https://sheets.google.com and create a new spreadsheet
-2. Name it whatever you want
-3. Follow the structure in Step 3 below
-4. Copy your Sheet ID from the URL: `https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit`
-
-**Make it Public**
-1. Click "Share" → "Change to anyone with the link" → Select "Viewer"
-
-### 3. Set Up Your Google Sheet
+### 4. Set Up Your Google Sheet
 
 Create two tabs:
 
@@ -56,7 +58,7 @@ Create two tabs:
 | Footer Text | #ffffff | |
 | Link Hover Color | #667eea | |
 
-### 4. Update index.html
+### 5. Update index.html
 
 1. Open `index.html` in your forked repository
 2. Click the edit pencil icon
@@ -64,11 +66,11 @@ Create two tabs:
 4. Replace with your actual Sheet ID
 5. Commit the change
 
-### 5. Enable GitHub Pages
+### 6. Enable GitHub Pages
 
 1. Go to Settings → Pages
 2. Select "main" branch as source
-3. Your site is now live at: `https://YOUR_USERNAME.github.io/REPOSITORY_NAME/`
+3. Your site is now live at: `https://YOUR_USERNAME.github.io/`
 
 ## How to Update Your Website
 
