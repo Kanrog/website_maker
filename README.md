@@ -4,6 +4,12 @@ Create your own website for **FREE** using GitHub Pages and Google Sheets.
 
 Have a look at my example site - https://kanrog.github.io/website_maker/
 
+## What is it?
+
+### Websites Made Simple ###
+
+Transform a Google Sheet into a live website in 15 minutes. Perfect for projects, portfolios, event promotions, and personal websites. No coding, no hosting fees, no complications.
+
 ## What You Need
 
 - A GitHub account (free)
