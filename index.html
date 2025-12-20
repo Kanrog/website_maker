@@ -258,70 +258,45 @@
         }
 
         // Apply styling from the Styling sheet
-        function applyCustomStyling(stylingData) {
-            if (!stylingData || stylingData.length < 2) return;
+function applyCustomStyling(stylingData) {
+    if (!stylingData || stylingData.length < 2) return;
 
-            // Default styling values
-            const defaults = {
-                mainHeaderColor: '#ffffff',
-                sectionHeaderColor: '#333333',
-                textColor: '#555555',
-                backgroundColor: '#ffffff',
-                linkColor: '#667eea',
-                mainHeaderSize: '48px',
-                sectionHeaderSize: '32px',
-                textSize: '16px'
-            };
+    // Extract styling values - Column A has labels, B has colors, C has sizes
+    const getValueByLabel = (label, columnIndex) => {
+        const row = stylingData.find(row => row[0] && row[0].trim() === label);
+        return row ? row[columnIndex] : null;
+    };
 
-            // Extract styling values - Find by label in Column A, then get values from Column B (colors) and Column C (sizes)
-            const getColorByLabel = (label) => {
-                const row = stylingData.find(row => row[0] === label);
-                return row ? row[1] : defaults[label.replace(/\s+/g, '').replace('Color', 'Color')];
-            };
+    const mainHeaderBg = getValueByLabel('Main Header Background', 1);
+    const siteHeaderText = getValueByLabel('Site Header Text', 1);
+    const siteHeaderSize = getValueByLabel('Site Header Text', 2);
+    const sectionHeaderText = getValueByLabel('Section Header Text', 1);
+    const sectionHeaderSize = getValueByLabel('Section Header Text', 2);
+    const sectionBodyText = getValueByLabel('Section Body Text', 1);
+    const sectionBodySize = getValueByLabel('Section Body Text', 2);
+    const footerBg = getValueByLabel('Footer Background', 1);
+    const footerText = getValueByLabel('Footer Text', 1);
+    const linkHoverColor = getValueByLabel('Link Hover Color', 1);
 
-            const getSizeByLabel = (label) => {
-                const row = stylingData.find(row => row[0] === label);
-                return row ? row[2] : defaults[label.replace(/\s+/g, '').replace('Size', 'Size')];
-            };
+    // Apply styles dynamically
+    const style = document.createElement('style');
+    let styleContent = '';
+    
+    if (mainHeaderBg) styleContent += `.site-header { background: linear-gradient(135deg, ${mainHeaderBg} 0%, ${mainHeaderBg} 100%); }`;
+    if (siteHeaderText) styleContent += `.site-header h1, .site-header .slogan, .site-header .intro-text { color: ${siteHeaderText}; }`;
+    if (siteHeaderSize) styleContent += `.site-header h1 { font-size: ${siteHeaderSize}; }`;
+    if (sectionHeaderText) styleContent += `.content-section h2 { color: ${sectionHeaderText}; }`;
+    if (sectionHeaderSize) styleContent += `.content-section h2 { font-size: ${sectionHeaderSize}; }`;
+    if (sectionBodyText) styleContent += `.content-section p { color: ${sectionBodyText}; }`;
+    if (sectionBodySize) styleContent += `.content-section p { font-size: ${sectionBodySize}; }`;
+    if (footerBg) styleContent += `.site-footer { background-color: ${footerBg}; }`;
+    if (footerText) styleContent += `.site-footer { color: ${footerText}; }`;
+    if (linkHoverColor) styleContent += `.content-section h2 a:hover { color: ${linkHoverColor}; }`;
+    
+    style.textContent = styleContent;
+    document.head.appendChild(style);
+}
 
-            const mainHeaderColor = getColorByLabel('Main Header Color');
-            const sectionHeaderColor = getColorByLabel('Section Header Color');
-            const textColor = getColorByLabel('Body Text Color');
-            const backgroundColor = getColorByLabel('Background Color');
-            const linkColor = getColorByLabel('Link Hover Color');
-            
-            const mainHeaderSize = getSizeByLabel('Main Header Color');
-            const sectionHeaderSize = getSizeByLabel('Section Header Color');
-            const textSize = getSizeByLabel('Body Text Color');
-
-            // Apply styles dynamically
-            const style = document.createElement('style');
-            style.textContent = `
-                body {
-                    background-color: ${backgroundColor};
-                }
-                .site-header h1 {
-                    color: ${mainHeaderColor};
-                    font-size: ${mainHeaderSize};
-                }
-                .content-section h2 {
-                    color: ${sectionHeaderColor};
-                    font-size: ${sectionHeaderSize};
-                }
-                .content-section p {
-                    color: ${textColor};
-                    font-size: ${textSize};
-                }
-                .content-section h2 a:hover {
-                    color: ${linkColor};
-                }
-                .site-header .slogan,
-                .site-header .intro-text {
-                    color: ${mainHeaderColor};
-                }
-            `;
-            document.head.appendChild(style);
-        }
 
         // Generate site header (Row 2)
         function generateSiteHeader(row) {
