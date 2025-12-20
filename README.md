@@ -111,7 +111,7 @@ Create new sections by adding a new row in your sheet. Each row becomes a new se
 
 ## Tips
 
-- Use hex color codes: `#FF5733`
+- Use hex color codes: `#FF5733`. You can find them using a tool like https://imagecolorpicker.com/color-code
 - Include units for sizes: `24px`
 - For images, upload to GitHub and use the raw URL, or use any public image URL
 - Keep text concise for better readability
