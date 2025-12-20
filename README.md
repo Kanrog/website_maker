@@ -10,19 +10,20 @@ Create your own website for **FREE** using GitHub Pages and Google Sheets.
 
 ## Setup
 
-### 1. Create a GitHub Repository
+### 1. Create a GitHub Account
 
-1. Go to https://github.com/new
-2. Name your repository: `YOUR_USERNAME.github.io` (replace `YOUR_USERNAME` with your actual GitHub username)
-   - This naming convention gives you a clean URL without `/website` at the end
-   - Example: If your username is `kanrog`, name it `kanrog.github.io` for the URL `https://kanrog.github.io`
-3. Set it to **Public**
-4. Click "Create repository"
+1. Go to https://github.com
+2. Click "Sign up"
+3. Follow the steps to create your account
+4. Verify your email address
 
 ### 2. Fork This Repository
 
 1. Go to this repository and click "Fork" at the top right
-2. In the fork settings, change the repository name to match your `YOUR_USERNAME.github.io` name
+2. In the fork settings, name your repository: `YOUR_USERNAME.github.io` (replace `YOUR_USERNAME` with your actual GitHub username)
+   - This naming convention gives you a clean URL without `/website` at the end
+   - Example: If your username is `kanrog`, name it `kanrog.github.io` for the URL `https://kanrog.github.io`
+   - You can also add on to an existing repo by giving it another name, like `example`, This way you'll get `YOUR_USERNAME.github.io/example`
 3. Click "Create fork"
 
 ### 3. Create a Google Sheet
@@ -32,39 +33,23 @@ Create your own website for **FREE** using GitHub Pages and Google Sheets.
 3. Copy your Sheet ID from the URL: `https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit`
 4. Click "Share" → "Change to anyone with the link" → Select "Viewer"
 
-### 4. Set Up Your Google Sheet
-
-Create two tabs:
-
-**Tab 1: "Sheet1"** (Your website content)
-- Row 1: Labels (don't change)
-- Row 2: Site title, hero image URL, slogan, intro text, footer text
-- Row 5+: Each row is a new section with: title, link (optional), image URL, text
-
-**Tab 2: "Styling"** (Colors and fonts)
-- Row 1: Labels (don't change)
-- Row 2+: Your color/font choices
-
-**Example Styling tab:**
-
-| Field Name | Color | Font Size |
-|---|---|---|
-| Main Header Background | #a5bf24 | |
-| Site Header Text | #ffffff | 48px |
-| Section Header Text | #333333 | 32px |
-| Section Body Text | #555555 | 16px |
-| Section Background | #707070 | |
-| Footer Background | #333333 | |
-| Footer Text | #ffffff | |
-| Link Hover Color | #667eea | |
-
-### 5. Update index.html
+### 4. Update index.html
 
 1. Open `index.html` in your forked repository
 2. Click the edit pencil icon
 3. Find: `const SHEET_ID = 'YOUR_SHEET_ID_HERE';`
 4. Replace with your actual Sheet ID
 5. Commit the change
+
+### 5. Add Images to Your Repository
+
+1. In your GitHub repository, click on the `images` folder
+2. Click "Add file" → "Upload files"
+3. Drag and drop your images into the folder
+4. Commit the changes
+5. In your Google Sheet, use the image path: `/images/your-image.jpg`
+   - Example: `/images/hero.jpg`, `/images/about.jpg`
+- You can also use public image-URL's
 
 ### 6. Enable GitHub Pages
 
@@ -74,11 +59,11 @@ Create two tabs:
 
 ## How to Update Your Website
 
-Just edit your Google Sheet. Your website updates automatically!
+Just edit your Google Sheet. Your website updates automatically when you refresh the browser!
 
 ## Tips
 
 - Use hex color codes: `#FF5733`
-- Include units for sizes: `24px`, `2em`
+- Include units for sizes: `24px`
 - For images, upload to GitHub and use the raw URL, or use any public image URL
 - Keep text concise for better readability
