@@ -290,7 +290,7 @@ function applyCustomStyling(stylingData) {
     if (sectionHeaderSize) styleContent += `.content-section h2 { font-size: ${sectionHeaderSize}; }`;
     if (sectionBodyText) styleContent += `.content-section p { color: ${sectionBodyText}; }`;
     if (sectionBodySize) styleContent += `.content-section p { font-size: ${sectionBodySize}; }`;
-    if (sectionBg) styleContent += `.content-section { background-color: ${sectionBg}; }`;
+    if (sectionBg) styleContent += `.content-section, .content-section:nth-child(even) { background-color: ${sectionBg} !important; }`;
     if (footerBg) styleContent += `.site-footer { background-color: ${footerBg}; }`;
     if (footerText) styleContent += `.site-footer { color: ${footerText}; }`;
     if (linkHoverColor) styleContent += `.content-section h2 a:hover { color: ${linkHoverColor}; }`;
