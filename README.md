@@ -1,6 +1,7 @@
 # Free Website Template with Google Sheets CMS
 
 Create your own website for **FREE** using GitHub Pages and Google Sheets.
+Have a look at my example site - https://kanrog.github.io/website_maker/
 
 ## What You Need
 
