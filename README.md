@@ -27,10 +27,10 @@ Transform a Google Sheet into a live website in 15 minutes. Perfect for projects
 
 ## Best For
 
-✅ Quick project showcases and portfolios
-✅ Event websites and landing pages
-✅ Personal brands and online presence
-✅ Static content that doesn't change frequently
+- ✅ Quick project showcases and portfolios
+- ✅ Event websites and landing pages
+- ✅ Personal brands and online presence
+- ✅ Static content that doesn't change frequently
 
 ---
 
