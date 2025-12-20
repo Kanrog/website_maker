@@ -120,6 +120,7 @@ Create new sections by adding a new row in your sheet. Each row becomes a new se
 
 ## Future plans
 
-- Change fonts
+- Add a feature to let the user change fonts
+- Have a few different layout styles to choose from with a simple way to switch between them in the sheet.
 - Multiple pages using Tabs in a sheet
 - Use hex value in sheet to set the color in each row to display automatically
