@@ -55,7 +55,7 @@ Have a look at my example site - https://kanrog.github.io/website_maker/
 
 ### 6. Enable GitHub Pages
 
-1. Go to Settings → Pages
+1. In your repository, go to Settings → Pages
 2. Select "main" branch as source
 3. Your site is now live at: `https://YOUR_USERNAME.github.io/`
 
