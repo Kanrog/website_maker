@@ -4,6 +4,8 @@ Create your own website for **FREE** using GitHub Pages and Google Sheets.
 
 Have a look at my example site - https://kanrog.github.io/website_maker/
 
+---
+
 ## What is it?
 
 ### Websites Made Simple ###
@@ -31,9 +33,9 @@ Transform a Google Sheet into a live website in 15 minutes. Perfect for projects
 - ✅ Personal brands and online presence
 - ✅ Static content that doesn't change frequently
 
----
-
 **Perfect if you need a simple, professional website fast. Not ideal for complex applications.**
+
+---
 
 ## What You Need
 
@@ -90,6 +92,8 @@ Transform a Google Sheet into a live website in 15 minutes. Perfect for projects
 2. Select "main" branch as source
 3. Your site is now live at: `https://YOUR_USERNAME.github.io/`
 
+---
+
 ## How to Update Your Website
 
 Just edit your Google Sheet. Your website updates automatically when you refresh the browser!
@@ -103,6 +107,7 @@ Use the **Style** tab in your Google Sheet to control colors and text size. Adju
 ### Adding Sections
 Create new sections by adding a new row in your sheet. Each row becomes a new section on your website—no coding required.
 
+---
 
 ## Tips
 
@@ -110,3 +115,11 @@ Create new sections by adding a new row in your sheet. Each row becomes a new se
 - Include units for sizes: `24px`
 - For images, upload to GitHub and use the raw URL, or use any public image URL
 - Keep text concise for better readability
+
+---
+
+## Future plans
+
+- Change fonts
+- Multiple pages using Tabs in a sheet
+- Use hex value in sheet to set the color in each row to display automatically
