@@ -94,6 +94,16 @@ Transform a Google Sheet into a live website in 15 minutes. Perfect for projects
 
 Just edit your Google Sheet. Your website updates automatically when you refresh the browser!
 
+### Editing Content
+Simply update the text, images, and links in your Google Sheet—changes appear instantly when you refresh your site.
+
+### Customizing Style
+Use the **Style** tab in your Google Sheet to control colors and text size. Adjust hex color codes and sizes to match your brand.
+
+### Adding Sections
+Create new sections by adding a new row in your sheet. Each row becomes a new section on your website—no coding required.
+
+
 ## Tips
 
 - Use hex color codes: `#FF5733`
