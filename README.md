@@ -23,7 +23,6 @@ Transform a Google Sheet into a live website in 15 minutes. Perfect for projects
 - **Not a Backend Solution** - No user accounts, logins, or databases
 - **Not for Complex Apps** - Limited to static content
 - **Not E-Commerce Ready** - Can't handle transactions or inventory
-- **Requires GitHub** - You'll need a basic understanding of Git
 
 ## Best For
 
